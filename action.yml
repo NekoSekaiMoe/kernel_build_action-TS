@@ -1,23 +1,138 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Android Kernel Build Action'
+description: "A action to built android kernel."
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: 'activity'
+  color: 'blue'
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  kernel-url:
+    description: 'Kernel Source Url'
     required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  depth:
+    required: false
+    default: 1
+  vendor-url:
+    description: 'Kernel Vendor Source Url'
+    required: false
+  kernel-dir:
+    required: false
+    default: kernel
+  vendor:
+    required: false
+    default: false
+  vendor-dir:
+    required: false
+    default: vendor
+  branch:
+    description: 'Branch name'
+    required: false
+    default: main
+  config:
+    description: 'configuration for building android kernel'
+    required: true
+    default: defconfig
+  arch:
+    required: true
+    default: arm64
+  android-version:
+    description: 'Android version.'
+    required: true
+    default: 12
+  ksu:
+    description: 'KernelSU function support'
+    required: false
+    default: false
+  ksu-version:
+    description: 'KernelSU default branch'
+    required: false
+    default: "main"
+  overlayfs:
+    description: 'Enable Overlayfs for ksu'
+    required: false
+    default: false
+  disable-lto:
+    description: 'Disable LTO configs for configs.'
+    required: false
+    default: false
+  lxc:
+    description: 'Enable lxc and docker configs for configs.'
+    required: false
+    default: false
+  lxc-patch:
+    description: 'Apply lxc patch aviod not booting'
+    required: false
+    default: false
+  nethunter:
+    description: 'Enable Kali nethunter'
+    required: false
+    default: false
+  nethunter-patch:
+    description: 'patch config'
+    required: false
+    default: false
+  kvm:
+    description: 'Enable KVM for configs.'
+    required: false
+    default: false
+  ccache:
+    description: 'Enable Ccache for compiling kernel'
+    required: false
+    default: false
+  aosp-gcc:
+    description: 'Use gcc from aosp project.'
+    required: true
+    default: true
+  aosp-clang:
+    description: 'Use clang from aosp project.'
+    required: false
+    default: false
+  aosp-clang-version:
+    required: false
+    default: "r383902"
+  other-clang-url:
+    required: false
+    default: ''
+  other-clang:
+    description: 'Use clang from 3rd party.'
+    required: false
+    default: false
+  other-clang-branch:
+    required: false
+    default: main
+  android-ndk:
+    description: 'Use Android NDK to build kernrl (Experimental features)'
+    required: false
+    default: false
+  android-ndk-version:
+    required: false
+    default: r21
+  android-ndk-x64:
+    required: false
+    default: true
+  python-27:
+    description: 'Use python2.7 when build kernel.'
+    required: false
+    default: false
+  anykernel3:
+    description: 'Package kernel use anykernel3.'
+    required: false
+    default: false
+  bootimg-url:
+    description: "boot.img path"
+    required: false
+    default: ""
+  release:
+    description: "After the kernel compilation is completed, it will be automatically published to the releases page"
+    required: false
+    default: false
+  access-token:
+    description: 'PAT with repository scope (https://github.com/settings/tokens)'
+    required: false
+  extra-cmd:
+    description: 'Extra options of building kernel.'
+    required: false
+    default: ""
 
 runs:
   using: node20
