@@ -30,6 +30,9 @@ push: package.json /usr/bin/git .git
 	git commit -m "$(shell date)"
 	git push
 
+install-dep:
+	$(INSTALL)
+
 build: package.json
 	$(INSTALL)
 	ncc build src/index.ts
@@ -47,6 +50,5 @@ fetch: package.json
 	git pull
 
 .PHONY: clean
-clean: package.json /usr/share/node_modules/yarn/bin/yarn
-	rimraf dist
-	git clean -dxf
+clean: package.json /usr/share/node_modules/yarn/bin/yarn dist/
+	rm -rf dist
