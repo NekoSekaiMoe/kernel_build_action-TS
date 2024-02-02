@@ -8,9 +8,9 @@ import * as process from "process";
 import * as cache from "@actions/cache";
 
 export async function execBash(cmd : string) {
-  await exec.exec("sh", ["-xc", cmd]);
+    await exec.exec("bash", ["-xc", cmd]);
 }
 
 export async function execBashSudo(cmd : string) {
-  await execBash("$(which sudo) " + cmd);
+    await execBash("$(which sudo) " + cmd);
 }
