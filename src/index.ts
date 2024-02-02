@@ -1,7 +1,8 @@
 /**
  * The entrypoint for the action.
  */
-import { run } from './main'
+import { InstallDep } from './install-dep'
+import { python2 } from './python2'
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 run()
