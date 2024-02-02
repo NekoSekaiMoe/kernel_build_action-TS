@@ -1,11 +1,9 @@
-import fs from "fs";
 import os from "os";
 import path from "path";
 import * as core from "@actions/core";
 import * as io from "@actions/io";
 import * as exec from "@actions/exec";
 import * as process from "process";
-import * as cache from "@actions/cache";
 import { execBash } from './sudo'
 import { execBashSudo } from './sudo'
 
