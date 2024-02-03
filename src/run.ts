@@ -1,10 +1,12 @@
-import { swap } from './swap'
-import { InstallDep } from './install-dep'
-import { InstallPython2 } from './python2'
+import { swap } from './swap';
+import { InstallDep } from './install-dep';
+import { InstallPython2 } from './python2';
+import { InitKSU } from './ksu';
 
 export async function run(): Promise<void> {
-    swap()
-    InstallDep()
-    InstallPython2()
+    await swap();
+    await InstallDep();
+    await InstallPython2();
+    await InitKSU();
 }
 
