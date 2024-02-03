@@ -33,8 +33,10 @@ push: package.json /usr/bin/git .git
 install-dep:
 	$(INSTALL)
 
-build: package.json
+build:
 	$(INSTALL)
+	ncc build src/post/index.ts
+	mv dist/index.js dist/post.js
 	ncc build src/index.ts
 
 f: .git
