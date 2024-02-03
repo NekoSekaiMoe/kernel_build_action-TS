@@ -1257,12 +1257,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.post = void 0;
 const exec = __importStar(__nccwpck_require__(9));
 async function post() {
-    exec.exec("$HOME/clang/bin/clang --version");
+    await exec.exec("echo 6");
 }
-exports.post = post;
+(async () => {
+    try {
+        await post();
+    }
+    catch (error) {
+        console.error("Failed to run post step.");
+        return 1;
+    }
+})();
 
 
 /***/ }),
