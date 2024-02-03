@@ -3,12 +3,11 @@ import path from "path";
 import * as core from "@actions/core";
 import * as io from "@actions/io";
 import * as exec from "@actions/exec";
-import * as process from "process";
 import { execBash } from './sudo'
 import { execBashSudo } from './sudo'
+import { python2 } from './input'
 
-export async function python2(): Promise<void> {
-    const python2 = core.getInput('python2', { required: false });
+export async function InstallPython2(): Promise<void> {
     if (python2 === 'true') {
         console.log("Installing Python2.7 instead Python3");
         await execBashSudo("apt-get install -y python2.7 python2.7-minimal")
