@@ -12,6 +12,3 @@ export async function execBashSudo(cmd : string) {
     await execBash("$(which sudo) " + cmd);
 }
 
-export async function pullCode(cmd : string) {
-    await exec.exec("git", ["clone", cmd]);
-}

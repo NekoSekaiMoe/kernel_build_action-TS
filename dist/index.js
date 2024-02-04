@@ -25933,6 +25933,28 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 5955:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PullCode = void 0;
+const input_1 = __nccwpck_require__(671);
+const sudo_1 = __nccwpck_require__(4156);
+async function PullCode() {
+    console.log("Pulling Kernel Source Code");
+    await (0, sudo_1.execBash)("git clone ${KernelUrl} -b ${branch} --recursive --depth=${depth} kernel/${KernelDir}");
+    if (input_1.vendor === 'true') {
+        console.log("Pulling Kernel Vendor Code");
+        await (0, sudo_1.execBash)("git clone ${VendorUrl} --depth=${depth} ${VendorDir}");
+    }
+}
+exports.PullCode = PullCode;
+
+
+/***/ }),
+
 /***/ 671:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -25962,7 +25984,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.KsuVersion = exports.ksu = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
+exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
 const core = __importStar(__nccwpck_require__(6904));
 exports.python2 = core.getInput('python2', { required: false });
 exports.KernelUrl = core.getInput('KernelUrl', { required: true });
@@ -25970,7 +25992,10 @@ exports.branch = core.getInput('branch', { required: true });
 exports.depth = core.getInput('depth', { required: false });
 exports.KernelDir = core.getInput('KernelDir', { required: false });
 exports.arch = core.getInput('arch', { required: true });
-exports.config = core.getInput('config', { required: false });
+exports.config = core.getInput('config', { required: true });
+exports.vendor = core.getInput('vendor', { required: false });
+exports.VendorDir = core.getInput('VendorDir', { required: false });
+exports.VendorUrl = core.getInput('VendorUrl', { required: false });
 exports.ksu = core.getInput('ksu', { required: false });
 exports.KsuVersion = core.getInput('KsuVersion', { required: false });
 
@@ -26144,11 +26169,13 @@ exports.run = void 0;
 const swap_1 = __nccwpck_require__(2399);
 const install_dep_1 = __nccwpck_require__(399);
 const python2_1 = __nccwpck_require__(9303);
+const code_1 = __nccwpck_require__(5955);
 const ksu_1 = __nccwpck_require__(1803);
 async function run() {
     await (0, swap_1.swap)();
     await (0, install_dep_1.InstallDep)();
     await (0, python2_1.InstallPython2)();
+    await (0, code_1.PullCode)();
     await (0, ksu_1.InitKSU)();
 }
 exports.run = run;
