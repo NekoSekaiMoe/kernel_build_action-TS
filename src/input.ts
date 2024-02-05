@@ -16,3 +16,7 @@ export const VendorDir = core.getInput('VendorDir', { required: false });
 export const VendorUrl = core.getInput('VendorUrl', { required: false });
 export const ksu = core.getInput('ksu', { required: false });
 export const KsuVersion = core.getInput('KsuVersion', { required: false });
+export const AospGcc = core.getInput('AospGcc', { required: true });
+export const AospClang = core.getInput('AospClang', { required: false });
+export const AndroidVersion = core.getInput('AndroidVersion', { required: true });
+
