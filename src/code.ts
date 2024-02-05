@@ -17,5 +17,9 @@ export async function PullCode(): Promise<void> {
     if (vendor === 'true') {
         console.log("Pulling Kernel Vendor Code");
         await execBash("git clone ${VendorUrl} --depth=${depth} ${VendorDir}");
+        if (await io.which("${VendorDir}/vendor")) {
+            await execBash("cp ${VendorDir}/vendor .");
+            return;
+        }
     }
 }
