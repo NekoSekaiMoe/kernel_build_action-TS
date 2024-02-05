@@ -27,7 +27,7 @@ all: lint format build clean
 
 push: package.json /usr/bin/git .git
 	git add .
-	git commit -m "$(shell date)"
+	git commit -asm
 	git push
 
 install-dep:
