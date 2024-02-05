@@ -25934,12 +25934,36 @@ exports["default"] = _default;
 /***/ }),
 
 /***/ 5955:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PullCode = void 0;
+const io = __importStar(__nccwpck_require__(5036));
 const input_1 = __nccwpck_require__(671);
 const sudo_1 = __nccwpck_require__(4156);
 async function PullCode() {
@@ -25948,9 +25972,48 @@ async function PullCode() {
     if (input_1.vendor === 'true') {
         console.log("Pulling Kernel Vendor Code");
         await (0, sudo_1.execBash)("git clone ${VendorUrl} --depth=${depth} ${VendorDir}");
+        if (await io.which("${VendorDir}/vendor")) {
+            await (0, sudo_1.execBash)("cp ${VendorDir}/vendor .");
+            return;
+        }
     }
 }
 exports.PullCode = PullCode;
+
+
+/***/ }),
+
+/***/ 9792:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.InstallGcc = void 0;
+const input_1 = __nccwpck_require__(671);
+const input_2 = __nccwpck_require__(671);
+const sudo_1 = __nccwpck_require__(4156);
+const sudo_2 = __nccwpck_require__(4156);
+const sudo_3 = __nccwpck_require__(4156);
+async function InstallGcc() {
+    if (input_1.AospGcc === 'true') {
+        console.log("Installing AOSP GCC");
+        (0, sudo_1.execMkdir)("$HOME/gcc-64");
+        (0, sudo_1.execMkdir)("$HOME/gcc-32");
+        if (input_2.AospClang === 'true') {
+            (0, sudo_2.execDown)("https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/refs/tags/android-12.1.0_r27.tar.gz -o gcc-aarch64.tar.gz");
+            (0, sudo_3.execBash)("tar -C $HOME/gcc-64 -zxf gcc-aarch64.tar.gz");
+            (0, sudo_2.execDown)("https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/+archive/refs/tags/android-12.1.0_r27.tar.gz -o gcc-aarch -o gcc-arm.tar.gz");
+            (0, sudo_3.execBash)("tar -C $HOME/gcc-32 -zxf gcc-arm.tar.gz");
+        }
+        else {
+            (0, sudo_3.execBash)("git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/ --depth=1 -b android${AndroidVersion}-release $HOME/gcc-64");
+            (0, sudo_3.execBash)("git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/ --depth=1 -b android${AndroidVersion}-release $HOME/gcc-32");
+            return;
+        }
+    }
+}
+exports.InstallGcc = InstallGcc;
 
 
 /***/ }),
@@ -25984,7 +26047,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
+exports.AndroidVersion = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
 const core = __importStar(__nccwpck_require__(6904));
 exports.python2 = core.getInput('python2', { required: false });
 exports.KernelUrl = core.getInput('KernelUrl', { required: true });
@@ -25998,6 +26061,9 @@ exports.VendorDir = core.getInput('VendorDir', { required: false });
 exports.VendorUrl = core.getInput('VendorUrl', { required: false });
 exports.ksu = core.getInput('ksu', { required: false });
 exports.KsuVersion = core.getInput('KsuVersion', { required: false });
+exports.AospGcc = core.getInput('AospGcc', { required: true });
+exports.AospClang = core.getInput('AospClang', { required: false });
+exports.AndroidVersion = core.getInput('AndroidVersion', { required: true });
 
 
 /***/ }),
@@ -26170,10 +26236,12 @@ const swap_1 = __nccwpck_require__(2399);
 const install_dep_1 = __nccwpck_require__(399);
 const python2_1 = __nccwpck_require__(9303);
 const code_1 = __nccwpck_require__(5955);
+const gcc_1 = __nccwpck_require__(9792);
 const ksu_1 = __nccwpck_require__(1803);
 async function run() {
     await (0, swap_1.swap)();
     await (0, install_dep_1.InstallDep)();
+    await (0, gcc_1.InstallGcc)();
     await (0, python2_1.InstallPython2)();
     await (0, code_1.PullCode)();
     await (0, ksu_1.InitKSU)();
@@ -26212,7 +26280,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.execBashSudo = exports.execBash = void 0;
+exports.execMkdir = exports.execDown = exports.execBashSudo = exports.execBash = void 0;
 const exec = __importStar(__nccwpck_require__(9009));
 async function execBash(cmd) {
     await exec.exec("bash", ["-xc", cmd]);
@@ -26222,6 +26290,14 @@ async function execBashSudo(cmd) {
     await execBash("$(which sudo) " + cmd);
 }
 exports.execBashSudo = execBashSudo;
+async function execDown(cmd) {
+    await execBash("$(which aria2c) " + cmd);
+}
+exports.execDown = execDown;
+async function execMkdir(cmd) {
+    await execBashSudo("$(which mkdir) " + cmd);
+}
+exports.execMkdir = execMkdir;
 
 
 /***/ }),
