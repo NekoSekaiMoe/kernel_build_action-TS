@@ -1257,9 +1257,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const io = __importStar(__nccwpck_require__(36));
 const exec = __importStar(__nccwpck_require__(9));
 async function post() {
-    await exec.exec("echo 6");
+    if (await io.which("$HOME/gcc-64/bin")) {
+        await exec.exec("HOME/gcc-64/bin/aarch64-linux-android-as --version");
+        return;
+    }
+    else if (await io.which("$HOME/clang/bin/clang")) {
+        await exec.exec("$HOME/clang/bin/clang --version");
+        return;
+    }
 }
 (async () => {
     try {
