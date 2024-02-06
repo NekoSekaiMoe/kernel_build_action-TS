@@ -1274,8 +1274,8 @@ async function post() {
         await post();
     }
     catch (error) {
-        console.error("Failed to run post step.");
-        return 1;
+        console.error("Failed to run post step:", error);
+        process.exit(1);
     }
 })();
 
