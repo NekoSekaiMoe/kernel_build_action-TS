@@ -26099,12 +26099,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InstallDep = void 0;
 const io = __importStar(__nccwpck_require__(5036));
+const process = __importStar(__nccwpck_require__(7282));
 const sudo_1 = __nccwpck_require__(4156);
 async function InstallDep() {
     console.log("Install build dependences");
     if (await io.which("apt-get")) {
         await (0, sudo_1.execBashSudo)("apt-get install --no-install-recommends -y binutils binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python3 aria2");
         return;
+    }
+    else {
+        console.error("Install dependences failed,Please use ubuntu linux.");
+        process.exit(255);
     }
 }
 exports.InstallDep = InstallDep;
@@ -26493,6 +26498,14 @@ module.exports = require("path");
 
 "use strict";
 module.exports = require("perf_hooks");
+
+/***/ }),
+
+/***/ 7282:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("process");
 
 /***/ }),
 
@@ -28253,7 +28266,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
  */
 const run_1 = __nccwpck_require__(6738);
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-(0, run_1.run)();
+(async () => {
+    try {
+        await (0, run_1.run)();
+    }
+    catch (error) {
+        console.error("Failed to execute action. Please to contect project owner.");
+        process.exit(1);
+    }
+})();
 
 })();
 
