@@ -28268,7 +28268,13 @@ const run_1 = __nccwpck_require__(6738);
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
     try {
-        await (0, run_1.run)();
+        if (process.env.GITHUB_ACTIONS === 'true') {
+            await (0, run_1.run)();
+        }
+        else {
+            console.error("This Cleanup Script Is Intended For Github Action Runner.");
+            process.exit(2);
+        }
     }
     catch (error) {
         console.error("Failed to execute action. Please to contect project owner.");
