@@ -1256,17 +1256,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const os_1 = __importDefault(__nccwpck_require__(37));
 const io = __importStar(__nccwpck_require__(36));
 const exec = __importStar(__nccwpck_require__(9));
 async function post() {
-    if (await io.which("$HOME/gcc-64/bin")) {
+    if (await io.which(os_1.default.homedir() + "/gcc-64/bin")) {
         await exec.exec("HOME/gcc-64/bin/aarch64-linux-android-as --version");
         return;
     }
-    else if (await io.which("$HOME/clang/bin/clang")) {
-        await exec.exec("$HOME/clang/bin/clang --version");
+    else if (await io.which(os_1.default.homedir() + "/clang/bin/clang")) {
+        await exec.exec(os_1.default.homedir() + "/clang/bin/clang --version");
         return;
+    }
+    else {
+        await console.error("Failed to load compiler.");
+        process.exit(127);
     }
 }
 (async () => {
@@ -1274,7 +1282,7 @@ async function post() {
         await post();
     }
     catch (error) {
-        console.error("Failed to run post step:", error);
+        console.error("Failed to run post step.");
         process.exit(1);
     }
 })();

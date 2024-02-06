@@ -11,7 +11,7 @@ async function post(): Promise<void> {
         await exec.exec(os.homedir() + "/clang/bin/clang --version");
         return;
     } else {
-        await exec.exec("Failed to load compiler.");
+        await console.error("Failed to load compiler.");
         process.exit(127);
     }
 }
