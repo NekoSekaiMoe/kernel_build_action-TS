@@ -18,5 +18,11 @@ export const ksu = core.getInput('ksu', { required: false });
 export const KsuVersion = core.getInput('KsuVersion', { required: false });
 export const AospGcc = core.getInput('AospGcc', { required: true });
 export const AospClang = core.getInput('AospClang', { required: false });
-export const AndroidVersion = core.getInput('AndroidVersion', { required: true });
+export const OtherClang = core.getInput('OtherClang', { required: false });
+export const OtherClangUrl = core.getInput('OtherClangUrl', { required: false });
+export const OtherClangBranch = core.getInput('OtherClangBranch', { required: true });
+export const apatch = core.getInput('apatch', { required: false });
+export const nethunter = core.getInput('nethunter', { required: false });
+
+
 
