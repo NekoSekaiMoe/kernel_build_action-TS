@@ -25,4 +25,6 @@ export const apatch = core.getInput('apatch', { required: false });
 export const nethunter = core.getInput('nethunter', { required: false });
 
 
+export const directoryPath = `./kernel/${KernelDir}`;
+
 
