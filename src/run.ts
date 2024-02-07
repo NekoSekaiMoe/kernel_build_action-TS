@@ -4,6 +4,7 @@ import { InstallPython2 } from './python2';
 import { PullCode } from "./code";
 import { InstallGcc } from "./gcc";
 import { InitKSU } from './ksu';
+import { Apatch } from './ksu';
 
 export async function run(): Promise<void> {
     await swap();
@@ -12,5 +13,6 @@ export async function run(): Promise<void> {
     await InstallPython2();
     await PullCode();
     await InitKSU();
+    await InitApatch();
 }
 
