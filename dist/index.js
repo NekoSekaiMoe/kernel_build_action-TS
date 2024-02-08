@@ -25933,6 +25933,64 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 872:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.InitApatch = void 0;
+const exec = __importStar(__nccwpck_require__(9009));
+const io = __importStar(__nccwpck_require__(5036));
+const input_1 = __nccwpck_require__(671);
+async function InitApatch() {
+    if (input_1.apatch === 'true') {
+        console.log("Initializing APatch");
+        const ApatchConfig = `${input_1.directoryPath}/Apatch/Kconfig`;
+        if (await io.which(ApatchConfig)) {
+            console.log("Apatch is Initialized.Skipping.");
+            return;
+        }
+        try {
+            const command = `mkdir drivers/apatch && aria2c https://github.com/dabao1955/kernel_build_action/raw/main/apatch/fix_module.patch && git apply fix_module.patch`;
+            const options = {
+                cwd: input_1.directoryPath,
+            };
+            await exec.exec(command, [], options);
+        }
+        finally {
+            await exec.exec("echo CONFIG_APATCH_SUPPORT=y >>${KernelDir}/arch/${arch}/${config}");
+        }
+    }
+}
+exports.InitApatch = InitApatch;
+
+
+/***/ }),
+
 /***/ 5955:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -25984,12 +26042,16 @@ exports.PullCode = PullCode;
 /***/ }),
 
 /***/ 9792:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InstallGcc = void 0;
+const os_1 = __importDefault(__nccwpck_require__(2037));
 const input_1 = __nccwpck_require__(671);
 const input_2 = __nccwpck_require__(671);
 const sudo_1 = __nccwpck_require__(4156);
@@ -25998,8 +26060,8 @@ const sudo_3 = __nccwpck_require__(4156);
 async function InstallGcc() {
     if (input_1.AospGcc === 'true') {
         console.log("Installing AOSP GCC");
-        (0, sudo_1.execMkdir)("$HOME/gcc-64");
-        (0, sudo_1.execMkdir)("$HOME/gcc-32");
+        (0, sudo_1.execMkdir)(os_1.default.homedir() + "/gcc-64");
+        (0, sudo_1.execMkdir)(os_1.default.homedir() + "/gcc-32");
         if (input_2.AospClang === 'true') {
             (0, sudo_2.execDown)("https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/refs/tags/android-12.1.0_r27.tar.gz -o gcc-aarch64.tar.gz");
             (0, sudo_3.execBash)("tar -C $HOME/gcc-64 -zxf gcc-aarch64.tar.gz");
@@ -26047,7 +26109,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AndroidVersion = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
+exports.directoryPath = exports.nethunterPatch = exports.nethunter = exports.apatch = exports.OtherClangBranch = exports.OtherClangUrl = exports.OtherClang = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
 const core = __importStar(__nccwpck_require__(6904));
 exports.python2 = core.getInput('python2', { required: false });
 exports.KernelUrl = core.getInput('KernelUrl', { required: true });
@@ -26063,7 +26125,13 @@ exports.ksu = core.getInput('ksu', { required: false });
 exports.KsuVersion = core.getInput('KsuVersion', { required: false });
 exports.AospGcc = core.getInput('AospGcc', { required: true });
 exports.AospClang = core.getInput('AospClang', { required: false });
-exports.AndroidVersion = core.getInput('AndroidVersion', { required: true });
+exports.OtherClang = core.getInput('OtherClang', { required: false });
+exports.OtherClangUrl = core.getInput('OtherClangUrl', { required: false });
+exports.OtherClangBranch = core.getInput('OtherClangBranch', { required: true });
+exports.apatch = core.getInput('apatch', { required: false });
+exports.nethunter = core.getInput('nethunter', { required: false });
+exports.nethunterPatch = core.getInput('nethunterPatch', { required: false });
+exports.directoryPath = `./kernel/${exports.KernelDir}`;
 
 
 /***/ }),
@@ -26153,8 +26221,7 @@ const input_1 = __nccwpck_require__(671);
 async function InitKSU() {
     if (input_1.ksu === 'true') {
         console.log("Initializing KsernelSU");
-        const directoryPath = `./kernel/${input_1.KernelDir}`;
-        const ksuConfig = `${directoryPath}/KernelSU/Kconfig`;
+        const ksuConfig = `${input_1.directoryPath}/KernelSU/Kconfig`;
         if (await io.which(ksuConfig)) {
             console.log("KernelSU is Initialized.Skipping.");
             return;
@@ -26162,7 +26229,7 @@ async function InitKSU() {
         try {
             const command = `curl -SsL https://github.com/tiann/KernelSU/raw/main/kernel/setup.sh | bash -s ${input_1.KsuVersion}`;
             const options = {
-                cwd: directoryPath,
+                cwd: input_1.directoryPath,
             };
             await exec.exec(command, [], options);
         }
@@ -26172,6 +26239,64 @@ async function InitKSU() {
     }
 }
 exports.InitKSU = InitKSU;
+
+
+/***/ }),
+
+/***/ 2255:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.InitNethunter = void 0;
+const exec = __importStar(__nccwpck_require__(9009));
+const io = __importStar(__nccwpck_require__(5036));
+const input_1 = __nccwpck_require__(671);
+async function InitNethunter() {
+    if (input_1.nethunter === 'true') {
+        console.log("Initializing Nethunter");
+        const ApatchConfig = `${input_1.directoryPath}/Apatch/Kconfig`;
+        if (await io.which(ApatchConfig)) {
+            console.log("Nethunter is Initialized.Skipping.");
+            return;
+        }
+        try {
+            const command = `wget https://github.com/Biohazardousrom/Kali-defconfig-checker/raw/master/check-kernel-config && bash check-kernel-config ${input_1.config} -w`;
+            const options = {
+                cwd: input_1.directoryPath,
+            };
+            await exec.exec(command, [], options);
+        }
+        finally {
+            await exec.exec("echo CONFIG_APATCH_SUPPORT=y >>${KernelDir}/arch/${arch}/${config}");
+        }
+    }
+}
+exports.InitNethunter = InitNethunter;
 
 
 /***/ }),
@@ -26243,6 +26368,8 @@ const python2_1 = __nccwpck_require__(9303);
 const code_1 = __nccwpck_require__(5955);
 const gcc_1 = __nccwpck_require__(9792);
 const ksu_1 = __nccwpck_require__(1803);
+const apatch_1 = __nccwpck_require__(872);
+const nethunter_1 = __nccwpck_require__(2255);
 async function run() {
     await (0, swap_1.swap)();
     await (0, install_dep_1.InstallDep)();
@@ -26250,6 +26377,8 @@ async function run() {
     await (0, python2_1.InstallPython2)();
     await (0, code_1.PullCode)();
     await (0, ksu_1.InitKSU)();
+    await (0, apatch_1.InitApatch)();
+    await (0, nethunter_1.InitNethunter)();
 }
 exports.run = run;
 

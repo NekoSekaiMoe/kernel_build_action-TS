@@ -4,12 +4,11 @@ import * as path from 'path';
 import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as io from "@actions/io";
-import { apatch, KernelDir, config, arch } from './input';
+import { apatch, directoryPath, config, arch } from './input';
 
 export async function InitApatch(): Promise<void> {
     if (apatch === 'true') {
         console.log("Initializing APatch");
-        const directoryPath = `./kernel/${KernelDir}`;
         const ApatchConfig = `${directoryPath}/Apatch/Kconfig`;
         if (await io.which(ApatchConfig)) {
             console.log("Apatch is Initialized.Skipping.");

@@ -23,7 +23,7 @@ export const OtherClangUrl = core.getInput('OtherClangUrl', { required: false })
 export const OtherClangBranch = core.getInput('OtherClangBranch', { required: true });
 export const apatch = core.getInput('apatch', { required: false });
 export const nethunter = core.getInput('nethunter', { required: false });
-
+export const nethunterPatch = core.getInput('nethunterPatch', { required: false });
 
 export const directoryPath = `./kernel/${KernelDir}`;
 

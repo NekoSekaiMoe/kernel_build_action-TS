@@ -4,12 +4,11 @@ import * as path from 'path';
 import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as io from "@actions/io";
-import { ksu, KernelDir, KsuVersion } from './input';
+import { ksu, directoryPath, KsuVersion } from './input';
 
 export async function InitKSU(): Promise<void> {
     if (ksu === 'true') {
         console.log("Initializing KsernelSU");
-        const directoryPath = `./kernel/${KernelDir}`;
         const ksuConfig = `${directoryPath}/KernelSU/Kconfig`;
         if (await io.which(ksuConfig)) {
             console.log("KernelSU is Initialized.Skipping.");

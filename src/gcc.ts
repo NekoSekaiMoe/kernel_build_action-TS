@@ -12,8 +12,8 @@ import { execBash } from "./sudo";
 export async function InstallGcc(): Promise<void> {
     if (AospGcc === 'true') {
         console.log("Installing AOSP GCC");
-        execMkdir("$HOME/gcc-64");
-        execMkdir("$HOME/gcc-32");
+        execMkdir(os.homedir() + "/gcc-64");
+        execMkdir(os.homedir() + "/gcc-32");
         if (AospClang === 'true') {
             execDown("https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/refs/tags/android-12.1.0_r27.tar.gz -o gcc-aarch64.tar.gz");
             execBash("tar -C $HOME/gcc-64 -zxf gcc-aarch64.tar.gz");
