@@ -26126,7 +26126,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.filePath = exports.directoryPath = exports.lto = exports.nethunterPatch = exports.nethunter = exports.apatch = exports.OtherClangBranch = exports.OtherClangUrl = exports.OtherClang = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
+exports.filePath = exports.directoryPath = exports.ccache = exports.lto = exports.nethunterPatch = exports.nethunter = exports.apatch = exports.OtherClangBranch = exports.OtherClangUrl = exports.OtherClang = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
 const core = __importStar(__nccwpck_require__(6904));
 exports.python2 = core.getInput('python2', { required: false });
 exports.KernelUrl = core.getInput('KernelUrl', { required: true });
@@ -26149,6 +26149,7 @@ exports.apatch = core.getInput('apatch', { required: false });
 exports.nethunter = core.getInput('nethunter', { required: false });
 exports.nethunterPatch = core.getInput('nethunterPatch', { required: false });
 exports.lto = core.getInput('lto', { required: false });
+exports.ccache = core.getInput('ccache', { required: false });
 exports.directoryPath = `./kernel/${exports.KernelDir}`;
 exports.filePath = '${directoryPath}/arch/${arch}/${config}';
 

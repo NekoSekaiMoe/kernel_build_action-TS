@@ -25,6 +25,7 @@ export const apatch = core.getInput('apatch', { required: false });
 export const nethunter = core.getInput('nethunter', { required: false });
 export const nethunterPatch = core.getInput('nethunterPatch', { required: false });
 export const lto = core.getInput('lto', { required: false });
+export const ccache = core.getInput('ccache', { required: false });
 
 export const directoryPath = `./kernel/${KernelDir}`;
 export const filePath = '${directoryPath}/arch/${arch}/${config}'
