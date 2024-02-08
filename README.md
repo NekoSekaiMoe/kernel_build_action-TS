@@ -16,3 +16,7 @@ A Workflow to build Android Kernel automatically
 This version (2.0.0) will be rebuit with TypeScript.
 
 Construction is expected to start during the summer vacation.
+
+When will it be open source? I have no idea.
+
+Maybe it will be open source tomorrow, maybe it will never be open source. Who knows?
