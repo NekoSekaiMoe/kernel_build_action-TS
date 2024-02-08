@@ -26041,6 +26041,23 @@ exports.PullCode = PullCode;
 
 /***/ }),
 
+/***/ 8635:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.containsText = void 0;
+const fs_1 = __nccwpck_require__(7147);
+function containsText(filePath, searchText) {
+    const content = (0, fs_1.readFileSync)(filePath, 'utf8');
+    return content.includes(searchText);
+}
+exports.containsText = containsText;
+
+
+/***/ }),
+
 /***/ 9792:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -26109,7 +26126,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.directoryPath = exports.nethunterPatch = exports.nethunter = exports.apatch = exports.OtherClangBranch = exports.OtherClangUrl = exports.OtherClang = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
+exports.filePath = exports.directoryPath = exports.lto = exports.nethunterPatch = exports.nethunter = exports.apatch = exports.OtherClangBranch = exports.OtherClangUrl = exports.OtherClang = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
 const core = __importStar(__nccwpck_require__(6904));
 exports.python2 = core.getInput('python2', { required: false });
 exports.KernelUrl = core.getInput('KernelUrl', { required: true });
@@ -26131,7 +26148,9 @@ exports.OtherClangBranch = core.getInput('OtherClangBranch', { required: true })
 exports.apatch = core.getInput('apatch', { required: false });
 exports.nethunter = core.getInput('nethunter', { required: false });
 exports.nethunterPatch = core.getInput('nethunterPatch', { required: false });
+exports.lto = core.getInput('lto', { required: false });
 exports.directoryPath = `./kernel/${exports.KernelDir}`;
+exports.filePath = '${directoryPath}/arch/${arch}/${config}';
 
 
 /***/ }),
@@ -26239,6 +26258,32 @@ async function InitKSU() {
     }
 }
 exports.InitKSU = InitKSU;
+
+
+/***/ }),
+
+/***/ 4195:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DisableLto = void 0;
+const file_1 = __nccwpck_require__(8635);
+const sudo_1 = __nccwpck_require__(4156);
+const input_1 = __nccwpck_require__(671);
+async function DisableLto() {
+    if (input_1.lto === 'false') {
+        const searchText = 'LTO';
+        if ((0, file_1.containsText)(input_1.filePath, searchText)) {
+            (0, sudo_1.execBash)("sed -i 's/CONFIG_LTO=y/CONFIG_LTO=n/' arch/${arch}/configs/${config}");
+            (0, sudo_1.execBash)("sed -i 's/CONFIG_LTO_CLANG=y/CONFIG_LTO_CLANG=n/' arch/${arch}/configs/${config}");
+            (0, sudo_1.execBash)("sed -i 's/CONFIG_THINLTO=y/CONFIG_THINLTO=n/' arch/${arch}/configs/${config}");
+            (0, sudo_1.execBash)("echo 'CONFIG_LTO_NONE=y' >> arch/${arch}/configs/${config}");
+        }
+    }
+}
+exports.DisableLto = DisableLto;
 
 
 /***/ }),
@@ -26370,6 +26415,7 @@ const gcc_1 = __nccwpck_require__(9792);
 const ksu_1 = __nccwpck_require__(1803);
 const apatch_1 = __nccwpck_require__(872);
 const nethunter_1 = __nccwpck_require__(2255);
+const lto_1 = __nccwpck_require__(4195);
 async function run() {
     await (0, swap_1.swap)();
     await (0, install_dep_1.InstallDep)();
@@ -26379,6 +26425,7 @@ async function run() {
     await (0, ksu_1.InitKSU)();
     await (0, apatch_1.InitApatch)();
     await (0, nethunter_1.InitNethunter)();
+    await (0, lto_1.DisableLto)();
 }
 exports.run = run;
 

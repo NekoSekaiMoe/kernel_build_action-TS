@@ -6,6 +6,7 @@ import { InstallGcc } from "./gcc";
 import { InitKSU } from './ksu';
 import { InitApatch } from './apatch';
 import { InitNethunter } from './nethunter';
+import { DisableLto } from './lto';
 
 export async function run(): Promise<void> {
     await swap();
@@ -16,5 +17,6 @@ export async function run(): Promise<void> {
     await InitKSU();
     await InitApatch();
     await InitNethunter();
+    await DisableLto();
 }
 
