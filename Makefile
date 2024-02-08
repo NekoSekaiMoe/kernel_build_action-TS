@@ -26,6 +26,8 @@ endif
 all: lint format build clean
 
 push: package.json /usr/bin/git .git
+	git config pull.rebase false
+	git pull
 	git add .
 	git commit -as
 	git push
