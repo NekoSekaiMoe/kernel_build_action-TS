@@ -26159,7 +26159,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.KernelPath = exports.filePath = exports.directoryPath = exports.BootimgUrl = exports.anykernel3 = exports.ccache = exports.lto = exports.nethunterPatch = exports.nethunter = exports.apatch = exports.OtherClangBranch = exports.OtherClangUrl = exports.OtherClang = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
+exports.KernelPath = exports.filePath = exports.directoryPath = exports.lxcPatch = exports.lxc = exports.kvm = exports.overlayfs = exports.BootimgUrl = exports.anykernel3 = exports.ccache = exports.lto = exports.nethunterPatch = exports.nethunter = exports.apatch = exports.OtherClangBranch = exports.OtherClangUrl = exports.OtherClang = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
 const core = __importStar(__nccwpck_require__(6904));
 exports.python2 = core.getInput('python2', { required: false });
 exports.KernelUrl = core.getInput('KernelUrl', { required: true });
@@ -26185,6 +26185,11 @@ exports.lto = core.getInput('lto', { required: false });
 exports.ccache = core.getInput('ccache', { required: false });
 exports.anykernel3 = core.getInput('anykernel3', { required: false });
 exports.BootimgUrl = core.getInput('BootimgUrl', { required: false });
+exports.overlayfs = core.getInput('overlayfs', { required: false });
+exports.kvm = core.getInput('kvm', { required: false });
+exports.lxc = core.getInput('lxc', { required: false });
+exports.lxcPatch = core.getInput('lxcPatch', { required: false });
+// necessary for compiling Android Kernel.
 exports.directoryPath = `./kernel/${exports.KernelDir}`;
 exports.filePath = '${directoryPath}/arch/${arch}/${config}';
 exports.KernelPath = '${directoryPath}/arch/${arch}/boot';
@@ -26313,10 +26318,10 @@ async function DisableLto() {
     if (input_1.lto === 'false') {
         const searchText = 'LTO';
         if ((0, file_1.containsText)(input_1.filePath, searchText)) {
-            (0, sudo_1.execBash)("sed -i 's/CONFIG_LTO=y/CONFIG_LTO=n/' arch/${arch}/configs/${config}");
-            (0, sudo_1.execBash)("sed -i 's/CONFIG_LTO_CLANG=y/CONFIG_LTO_CLANG=n/' arch/${arch}/configs/${config}");
-            (0, sudo_1.execBash)("sed -i 's/CONFIG_THINLTO=y/CONFIG_THINLTO=n/' arch/${arch}/configs/${config}");
-            (0, sudo_1.execBash)("echo 'CONFIG_LTO_NONE=y' >> arch/${arch}/configs/${config}");
+            (0, sudo_1.execBash)("sed -i 's/CONFIG_LTO=y/CONFIG_LTO=n/' ${filePath}");
+            (0, sudo_1.execBash)("sed -i 's/CONFIG_LTO_CLANG=y/CONFIG_LTO_CLANG=n/' ${filePath}");
+            (0, sudo_1.execBash)("sed -i 's/CONFIG_THINLTO=y/CONFIG_THINLTO=n/' ${filePath}");
+            (0, sudo_1.execBash)("echo 'CONFIG_LTO_NONE=y' >> ${filePath}");
         }
     }
 }
@@ -26379,6 +26384,29 @@ async function InitNethunter() {
     }
 }
 exports.InitNethunter = InitNethunter;
+
+
+/***/ }),
+
+/***/ 9767:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.InitOverlay = void 0;
+const file_1 = __nccwpck_require__(8635);
+const sudo_1 = __nccwpck_require__(4156);
+const input_1 = __nccwpck_require__(671);
+async function InitOverlay() {
+    if (input_1.overlayfs === 'true') {
+        const searchText = 'LTO';
+        if ((0, file_1.containsText)(input_1.filePath, searchText)) {
+            (0, sudo_1.execBash)("echo 'CONFIG_OVERLAY_FS=y' >>  >> ${filePath}");
+        }
+    }
+}
+exports.InitOverlay = InitOverlay;
 
 
 /***/ }),
@@ -26454,6 +26482,7 @@ const ksu_1 = __nccwpck_require__(1803);
 const apatch_1 = __nccwpck_require__(872);
 const nethunter_1 = __nccwpck_require__(2255);
 const lto_1 = __nccwpck_require__(4195);
+const overlay_1 = __nccwpck_require__(9767);
 const compile_1 = __nccwpck_require__(7327);
 const upload_1 = __nccwpck_require__(8873);
 async function run() {
@@ -26467,6 +26496,7 @@ async function run() {
     await (0, apatch_1.InitApatch)();
     await (0, nethunter_1.InitNethunter)();
     await (0, lto_1.DisableLto)();
+    await (0, overlay_1.InitOverlay)();
     await (0, compile_1.compile)();
     await (0, upload_1.upload)();
 }
