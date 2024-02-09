@@ -11,10 +11,10 @@ export async function DisableLto(): Promise<void> {
     if (lto === 'false') {
         const searchText = 'LTO';
         if (containsText(filePath, searchText)) {
-            execBash("sed -i 's/CONFIG_LTO=y/CONFIG_LTO=n/' arch/${arch}/configs/${config}");
-            execBash("sed -i 's/CONFIG_LTO_CLANG=y/CONFIG_LTO_CLANG=n/' arch/${arch}/configs/${config}");
-            execBash("sed -i 's/CONFIG_THINLTO=y/CONFIG_THINLTO=n/' arch/${arch}/configs/${config}");
-            execBash("echo 'CONFIG_LTO_NONE=y' >> arch/${arch}/configs/${config}");
+            execBash("sed -i 's/CONFIG_LTO=y/CONFIG_LTO=n/' ${filePath}");
+            execBash("sed -i 's/CONFIG_LTO_CLANG=y/CONFIG_LTO_CLANG=n/' ${filePath}");
+            execBash("sed -i 's/CONFIG_THINLTO=y/CONFIG_THINLTO=n/' ${filePath}");
+            execBash("echo 'CONFIG_LTO_NONE=y' >> ${filePath}");
         }
     }
 }
