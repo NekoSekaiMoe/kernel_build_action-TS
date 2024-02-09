@@ -3,15 +3,15 @@ import path from "path";
 import * as core from "@actions/core";
 import * as io from "@actions/io";
 import * as exec from "@actions/exec";
-import { anykernel3, KernelPath } from './input';
-import { execBash, execMkdir } from './sudo'
+import { anykernel3, KernelPath, BootimgUrl } from './input';
+import { execBash, execMkdir, execDown } from './sudo'
 
 export async function upload(): Promise<void> {
     execMkdir("./out");
     if (anykernel3 === 'true') {
         console.log("Packaging Anykernel3 Flasher");
         execBash("git clone https://github.com/osm0sis/AnyKernel3");
-        execbash("sed -i 's!block=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;!block=auto;!g' AnyKernel3/anykernel.sh");
+        execBash("sed -i 's!block=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;!block=auto;!g' AnyKernel3/anykernel.sh");
         execBash("sed -i 's/do.devicecheck=1/do.devicecheck=0/g' AnyKernel3/anykernel.sh");
         execBash("sed -i 's/is_slot_device=0;/is_slot_device=auto;/g' AnyKernel3/anykernel.sh");
         if (await io.which("${KernelPath}/Image.*-dtb")) {
@@ -28,6 +28,9 @@ export async function upload(): Promise<void> {
         execBash("mv anykernel3-flasher.zip out");
         console.log("anykernel3-flasher is ready,you can find it in out directory.");
     } else {
-        console.log("6");
+        console.log("Preparing to Upload boot.img");
+        execBash("git clone https://github.com/Shubhamvis98/AIK");
+        execDown("${BootimgUrl} -o boot.img");
+        execBash("nohup bash AIK/unpackimg ../boot.img");  
     }
 }
