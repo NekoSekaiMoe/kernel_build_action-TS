@@ -15,14 +15,14 @@ export async function upload(): Promise<void> {
         execBash("sed -i 's/do.devicecheck=1/do.devicecheck=0/g' AnyKernel3/anykernel.sh");
         execBash("sed -i 's/is_slot_device=0;/is_slot_device=auto;/g' AnyKernel3/anykernel.sh");
         if (await io.which("${KernelPath}/Image.*-dtb")) {
-            exexBash("cp ${KernelPath}/Image.*-dtb AnyKernel3");
+            execBash("cp ${KernelPath}/Image.*-dtb AnyKernel3");
         } else if (await io.which("${KernelPath}/Image.*")) {
-            exexBash("cp ${KernelPath}/Image.* AnyKernel3);
+            execBash("cp ${KernelPath}/Image.* AnyKernel3);
         } else if (await io.which("${KernelPath}/Image")) {
-            exexBash("cp ${KernelPath}/Image AnyKernel3");
+            execBash("cp ${KernelPath}/Image AnyKernel3");
         }
         if (await io.which("${KernelPath}/dtbo.img")) {
-            exexBash("cp ${KernelPath}/dtbo.img AnyKernel3");
+            execBash("cp ${KernelPath}/dtbo.img AnyKernel3");
         }
         execBash("zip -R anykernel3-flasher.zip AnyKernel3/*");
         execBash("mv anykernel3-flasher.zip out");
