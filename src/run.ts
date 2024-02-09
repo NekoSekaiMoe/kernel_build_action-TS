@@ -10,6 +10,7 @@ import { InitNethunter } from './nethunter';
 import { DisableLto } from './lto';
 
 export async function run(): Promise<void> {
+    await cleanup();
     await swap();
     await InstallDep();
     await InstallGcc();
