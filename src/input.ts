@@ -29,3 +29,4 @@ export const ccache = core.getInput('ccache', { required: false });
 
 export const directoryPath = `./kernel/${KernelDir}`;
 export const filePath = '${directoryPath}/arch/${arch}/${config}'
+export const KernelPath = '${directoryPath}/arch/${arch}/boot'
