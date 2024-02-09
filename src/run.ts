@@ -8,6 +8,7 @@ import { InitKSU } from './ksu';
 import { InitApatch } from './apatch';
 import { InitNethunter } from './nethunter';
 import { DisableLto } from './lto';
+import { InitOverlay } from './overlay';
 import { compile } from './compile';
 import { upload } from './upload';
 
@@ -22,6 +23,7 @@ export async function run(): Promise<void> {
     await InitApatch();
     await InitNethunter();
     await DisableLto();
+    await InitOverlay();
     await compile();
     await upload();
 }
