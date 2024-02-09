@@ -17,7 +17,7 @@ export async function upload(): Promise<void> {
         if (await io.which("${KernelPath}/Image.*-dtb")) {
             execBash("cp ${KernelPath}/Image.*-dtb AnyKernel3");
         } else if (await io.which("${KernelPath}/Image.*")) {
-            execBash("cp ${KernelPath}/Image.* AnyKernel3);
+            execBash("cp ${KernelPath}/Image.* AnyKernel3");
         } else if (await io.which("${KernelPath}/Image")) {
             execBash("cp ${KernelPath}/Image AnyKernel3");
         }

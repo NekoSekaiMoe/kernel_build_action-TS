@@ -25991,6 +25991,24 @@ exports.InitApatch = InitApatch;
 
 /***/ }),
 
+/***/ 9689:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.cleanup = void 0;
+const sudo_1 = __nccwpck_require__(4156);
+async function cleanup() {
+    console.log("Cleaning Up.");
+    (0, sudo_1.execBash)("docker rmi -f $(docker images -q");
+    (0, sudo_1.execBash)("wget -q https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh && NONINTERACTIVE=1 bash ./uninstall.sh -f -q");
+}
+exports.cleanup = cleanup;
+
+
+/***/ }),
+
 /***/ 5955:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -26037,6 +26055,21 @@ async function PullCode() {
     }
 }
 exports.PullCode = PullCode;
+
+
+/***/ }),
+
+/***/ 7327:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.compile = void 0;
+async function compile() {
+    console.log("Building Kernel.");
+}
+exports.compile = compile;
 
 
 /***/ }),
@@ -26126,7 +26159,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.filePath = exports.directoryPath = exports.ccache = exports.lto = exports.nethunterPatch = exports.nethunter = exports.apatch = exports.OtherClangBranch = exports.OtherClangUrl = exports.OtherClang = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
+exports.KernelPath = exports.filePath = exports.directoryPath = exports.BootimgUrl = exports.anykernel3 = exports.ccache = exports.lto = exports.nethunterPatch = exports.nethunter = exports.apatch = exports.OtherClangBranch = exports.OtherClangUrl = exports.OtherClang = exports.AospClang = exports.AospGcc = exports.KsuVersion = exports.ksu = exports.VendorUrl = exports.VendorDir = exports.vendor = exports.config = exports.arch = exports.KernelDir = exports.depth = exports.branch = exports.KernelUrl = exports.python2 = void 0;
 const core = __importStar(__nccwpck_require__(6904));
 exports.python2 = core.getInput('python2', { required: false });
 exports.KernelUrl = core.getInput('KernelUrl', { required: true });
@@ -26150,8 +26183,11 @@ exports.nethunter = core.getInput('nethunter', { required: false });
 exports.nethunterPatch = core.getInput('nethunterPatch', { required: false });
 exports.lto = core.getInput('lto', { required: false });
 exports.ccache = core.getInput('ccache', { required: false });
+exports.anykernel3 = core.getInput('anykernel3', { required: false });
+exports.BootimgUrl = core.getInput('BootimgUrl', { required: false });
 exports.directoryPath = `./kernel/${exports.KernelDir}`;
 exports.filePath = '${directoryPath}/arch/${arch}/${config}';
+exports.KernelPath = '${directoryPath}/arch/${arch}/boot';
 
 
 /***/ }),
@@ -26408,6 +26444,7 @@ exports.InstallPython2 = InstallPython2;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
+const cleanup_1 = __nccwpck_require__(9689);
 const swap_1 = __nccwpck_require__(2399);
 const install_dep_1 = __nccwpck_require__(399);
 const python2_1 = __nccwpck_require__(9303);
@@ -26417,7 +26454,10 @@ const ksu_1 = __nccwpck_require__(1803);
 const apatch_1 = __nccwpck_require__(872);
 const nethunter_1 = __nccwpck_require__(2255);
 const lto_1 = __nccwpck_require__(4195);
+const compile_1 = __nccwpck_require__(7327);
+const upload_1 = __nccwpck_require__(8873);
 async function run() {
+    await (0, cleanup_1.cleanup)();
     await (0, swap_1.swap)();
     await (0, install_dep_1.InstallDep)();
     await (0, gcc_1.InstallGcc)();
@@ -26427,6 +26467,8 @@ async function run() {
     await (0, apatch_1.InitApatch)();
     await (0, nethunter_1.InitNethunter)();
     await (0, lto_1.DisableLto)();
+    await (0, compile_1.compile)();
+    await (0, upload_1.upload)();
 }
 exports.run = run;
 
@@ -26522,6 +26564,75 @@ async function swap() {
     }
 }
 exports.swap = swap;
+
+
+/***/ }),
+
+/***/ 8873:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.upload = void 0;
+const io = __importStar(__nccwpck_require__(5036));
+const input_1 = __nccwpck_require__(671);
+const sudo_1 = __nccwpck_require__(4156);
+async function upload() {
+    (0, sudo_1.execMkdir)("./out");
+    if (input_1.anykernel3 === 'true') {
+        console.log("Packaging Anykernel3 Flasher");
+        (0, sudo_1.execBash)("git clone https://github.com/osm0sis/AnyKernel3");
+        (0, sudo_1.execBash)("sed -i 's!block=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;!block=auto;!g' AnyKernel3/anykernel.sh");
+        (0, sudo_1.execBash)("sed -i 's/do.devicecheck=1/do.devicecheck=0/g' AnyKernel3/anykernel.sh");
+        (0, sudo_1.execBash)("sed -i 's/is_slot_device=0;/is_slot_device=auto;/g' AnyKernel3/anykernel.sh");
+        if (await io.which("${KernelPath}/Image.*-dtb")) {
+            (0, sudo_1.execBash)("cp ${KernelPath}/Image.*-dtb AnyKernel3");
+        }
+        else if (await io.which("${KernelPath}/Image.*")) {
+            (0, sudo_1.execBash)("cp ${KernelPath}/Image.* AnyKernel3");
+        }
+        else if (await io.which("${KernelPath}/Image")) {
+            (0, sudo_1.execBash)("cp ${KernelPath}/Image AnyKernel3");
+        }
+        if (await io.which("${KernelPath}/dtbo.img")) {
+            (0, sudo_1.execBash)("cp ${KernelPath}/dtbo.img AnyKernel3");
+        }
+        (0, sudo_1.execBash)("zip -R anykernel3-flasher.zip AnyKernel3/*");
+        (0, sudo_1.execBash)("mv anykernel3-flasher.zip out");
+        console.log("anykernel3-flasher is ready,you can find it in out directory.");
+    }
+    else {
+        console.log("Preparing to Upload boot.img");
+        (0, sudo_1.execBash)("git clone https://github.com/Shubhamvis98/AIK");
+        (0, sudo_1.execDown)("${BootimgUrl} -o boot.img");
+        (0, sudo_1.execBash)("nohup bash AIK/unpackimg ../boot.img");
+    }
+}
+exports.upload = upload;
 
 
 /***/ }),
