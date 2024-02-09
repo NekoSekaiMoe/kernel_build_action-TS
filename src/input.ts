@@ -28,7 +28,12 @@ export const lto = core.getInput('lto', { required: false });
 export const ccache = core.getInput('ccache', { required: false });
 export const anykernel3 = core.getInput('anykernel3', { required: false });
 export const BootimgUrl = core.getInput('BootimgUrl', { required: false });
+export const overlayfs = core.getInput('overlayfs', { required: false });
+export const kvm = core.getInput('kvm', { required: false });
+export const lxc = core.getInput('lxc', { required: false });
+export const lxcPatch = core.getInput('lxcPatch', { required: false });
 
+// necessary for compiling Android Kernel.
 export const directoryPath = `./kernel/${KernelDir}`;
 export const filePath = '${directoryPath}/arch/${arch}/${config}'
 export const KernelPath = '${directoryPath}/arch/${arch}/boot'
