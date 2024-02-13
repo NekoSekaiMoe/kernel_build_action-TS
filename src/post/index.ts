@@ -19,7 +19,7 @@ async function post(): Promise<void> {
 (async () => {
     try {
         if (process.env.GITHUB_ACTIONS === 'true') {
-            await run();
+            await post();
         } else {
             console.error("This Cleanup Script Is Intended For Github Action Runner.");
             process.exit(2);
