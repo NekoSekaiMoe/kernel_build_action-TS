@@ -17,10 +17,10 @@
 NODE_MODULES = ./node_modules
 
 ifeq ("$(wildcard $(NODE_MODULES))","")
-  INSTALL = yarn install --frozen-lockfile && date
-else
-  INSTALL = date
+  INSTALL = pnpm i
 endif
+
+BUILD = ncc build
 
 .PHONY: all
 all: lint format build clean
@@ -37,9 +37,9 @@ install-dep:
 
 build:
 	$(INSTALL)
-	ncc build src/post/index.ts
+	$(BUILD) src/post/index.ts
 	mv dist/index.js dist/post.js
-	ncc build src/index.ts
+	$(BUILD) src/index.ts
 
 f: .git
 	$(MAKE) fetch -C $(abspath .)
