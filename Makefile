@@ -40,6 +40,7 @@ build:
 	$(BUILD) src/post/index.ts
 	mv dist/index.js dist/post.js
 	$(BUILD) src/index.ts
+	chmod 755 -R dist/*
 
 f: .git
 	$(MAKE) fetch -C $(abspath .)
