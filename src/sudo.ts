@@ -12,10 +12,6 @@ export async function execBashSudo(cmd : string) {
     await execBash("$(which sudo) " + cmd);
 }
 
-export async function execDown(cmd : string) {
-    await execBash("$(which aria2c) " + cmd);
-}
-
 export async function execMkdir(cmd : string) {
     await execBashSudo("$(which mkdir) " + cmd);
 }
